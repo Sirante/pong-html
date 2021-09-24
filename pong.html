@@ -7,7 +7,7 @@
 
 <body>
 	<div style="background-color:aqua;width: 790px;height: 60px;border: 5px solid #000">
-		<h1 style="text-align: center;padding: 1px;">PONG</h1>		
+		<h1 style="text-align: center;padding: 1px;">PONG</h1>
 	</div>
 	<canvas id="gameCanvas" width="800" height="600">
 	</canvas>
@@ -21,135 +21,142 @@
 		var paddleThiccness = 10;
 		var paddleLong = 100;
 		var ballRadius = 5;
-		var paddlePosX = gameCanvas.width-paddleThiccness;
-		var paddlePosY1 = gameCanvas.height/2-paddleLong/2;
-		var paddlePosY2 = gameCanvas.height/2-paddleLong/2;
+		var paddlePosX = gameCanvas.width - paddleThiccness;
+		var paddlePosY1 = gameCanvas.height / 2 - paddleLong / 2;
+		var paddlePosY2 = gameCanvas.height / 2 - paddleLong / 2;
 		var enemySpeed = 20;
 
-		function calculateMousePos(evt){
+		function calculateMousePos(evt) {
 			var rect = canvas.getBoundingClientRect();
 			var root = document.documentElement;
 			var mouseX = evt.clientX - rect.left - root.scrollLeft;
 			var mouseY = evt.clientY - rect.top - root.scrollTop;
 			return {
-				x:mouseX,
-				y:mouseY
+				x: mouseX,
+				y: mouseY
 			};
 		}
 
-		window.onload = function() {
-	canvas = document.getElementById('gameCanvas');
-	canvasContext = canvas.getContext('2d');
+		window.onload = function () {
+			canvas = document.getElementById('gameCanvas');
+			canvasContext = canvas.getContext('2d');
 
-	var framesPerSecond = 60;
-	setInterval(function() {
-			moveEverything();
-			drawEverything();	
-		}, 1000/framesPerSecond);
+			var framesPerSecond = 60;
+			setInterval(function () {
+				moveEverything();
+				drawEverything();
+			}, 1000 / framesPerSecond);
 
-	canvas.addEventListener('mousemove',
-		function(evt) {
-			var mousePos = calculateMousePos(evt);
-			paddle1Y = mousePos.y-(paddleLong/2);
-		});
-}
+			canvas.addEventListener('mousemove',
+				function (evt) {
+					var mousePos = calculateMousePos(evt);
+					paddle1Y = mousePos.y - (paddleLong / 2);
+				});
+		}
 
 		function drawEverything() {
 
 			//draw the background black
-			colorRect(0,0,canvas.width,canvas.height,'black');
+			colorRect(0, 0, canvas.width, canvas.height, 'black');
 
 			//draw the white "ball"
-			colorBall(ballX,ballY,ballRadius,'white');
-			
+			colorBall(ballX, ballY, ballRadius, 'white');
+
 
 			//right player paddle
-			colorRect(0,paddle1Y,paddleThiccness,paddleLong,'purple');
+			colorRect(0, paddle1Y, paddleThiccness, paddleLong, 'purple');
 
 			//left player paddle
-			colorRect(paddlePosX,paddlePosY2,paddleThiccness,paddleLong,'purple');
+			colorRect(paddlePosX, paddlePosY2, paddleThiccness, paddleLong, 'purple');
 		}
 
 		//simplified drawing function
-		function colorRect(leftX,topY,width,height,drawColor){
-			canvasContext.fillStyle=drawColor;
-			canvasContext.fillRect(leftX,topY,width,height,drawColor);
+		function colorRect(leftX, topY, width, height, drawColor) {
+			canvasContext.fillStyle = drawColor;
+			canvasContext.fillRect(leftX, topY, width, height, drawColor);
 		}
 		//simplified drawing circle function
-		function colorBall(coreX,coreY,radius,drawColor){
-			canvasContext.fillStyle=drawColor;
+		function colorBall(coreX, coreY, radius, drawColor) {
+			canvasContext.fillStyle = drawColor;
 			canvasContext.beginPath();
-			canvasContext.arc(coreX,coreY,radius,0,Math.PI*2,true,drawColor);
+			canvasContext.arc(coreX, coreY, radius, 0, Math.PI * 2, true, drawColor);
 			canvasContext.fill();
 		}
 
-		function ballReset(){
+		function ballReset() {
 			ballSpeedX = -ballSpeedX;
-			ballX = canvas.width/2;
-			ballY = canvas.height/2;
+			ballX = canvas.width / 2;
+			ballY = canvas.height / 2;
 		}
 
 		//magic, adding y movement
 		function moveEverything() {
-			ballX=ballX+ballSpeedX;
-			ballY=ballY+ballSpeedY;
-			if (ballX > canvas.width-paddleThiccness-ballRadius) {
+			ballX = ballX + ballSpeedX;
+			ballY = ballY + ballSpeedY;
+			if (ballX > canvas.width - paddleThiccness - ballRadius) {
 				if (ballY > paddlePosY2 &&
-					ballY < paddlePosY2+paddleLong){
-				ballSpeedX = -ballSpeedX;}
-				else{
+					ballY < paddlePosY2 + paddleLong) {
+					ballSpeedX = -ballSpeedX;
+				}
+				else {
 					ballReset();
 				};
 			}
-			if (ballX < 0+paddleThiccness+ballRadius) {
+			if (ballX < 0 + paddleThiccness + ballRadius) {
 				if (ballY > paddle1Y &&
-					ballY < paddle1Y+paddleLong){
-				ballSpeedX = -ballSpeedX;}
-				else{
+					ballY < paddle1Y + paddleLong) {
+					ballSpeedX = -ballSpeedX;
+				}
+				else {
 					ballReset();
 				};
 				console.log(ballSpeedX);
 			}
-			if (ballY > canvas.height-ballRadius){
+			if (ballY > canvas.height - ballRadius) {
 				ballSpeedY = -ballSpeedY;
 			}
-			if (ballY < 0+ballRadius){
+			if (ballY < 0 + ballRadius) {
 				ballSpeedY = -ballSpeedY;
 			}
-			if (ballY > paddlePosY2+paddleLong/2){
+			if (ballY > paddlePosY2 + paddleLong / 2) {
 				paddlePosY2 = paddlePosY2 + enemySpeed;
 			}
-			if (ballY < paddlePosY2+paddleLong/2){
+			if (ballY < paddlePosY2 + paddleLong / 2) {
 				paddlePosY2 = paddlePosY2 - enemySpeed;
-		}
+			}
 		}
 
 		//lets the user changes the ball speed
 		function setspeed5() {
-			if(ballSpeedX<0){
-			ballSpeedX = -5;
-			console.log(ballSpeedX);
-		}
-			else{ballSpeedX=5
-			console.log(ballSpeedX);
+			if (ballSpeedX < 0) {
+				ballSpeedX = -5;
+				console.log(ballSpeedX);
+			}
+			else {
+				ballSpeedX = 5
+				console.log(ballSpeedX);
 			}
 
 		}
 		function setspeed10() {
-			if(ballSpeedX<0){
-			ballSpeedX = -10;
-			console.log(ballSpeedX);
+			if (ballSpeedX < 0) {
+				ballSpeedX = -10;
+				console.log(ballSpeedX);
 			}
-			else{ballSpeedX=10;
-			console.log(ballSpeedX);}
+			else {
+				ballSpeedX = 10;
+				console.log(ballSpeedX);
+			}
 		}
 		function setspeed20() {
-			if(ballSpeedX<0){
-			ballSpeedX = -20;
-			console.log(ballSpeedX);
+			if (ballSpeedX < 0) {
+				ballSpeedX = -20;
+				console.log(ballSpeedX);
 			}
-			else{ballSpeedX=20
-				console.log(ballSpeedX);}
+			else {
+				ballSpeedX = 20
+				console.log(ballSpeedX);
+			}
 		}
 		/*function setspeed(elem) {
 			console.log(elem.value);
